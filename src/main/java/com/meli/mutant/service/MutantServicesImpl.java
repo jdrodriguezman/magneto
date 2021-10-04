@@ -4,14 +4,14 @@ import com.meli.mutant.model.Dna;
 import com.meli.mutant.model.Stat;
 import com.meli.mutant.model.entity.Human;
 import com.meli.mutant.repository.impl.HumanRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+@RequiredArgsConstructor
 @Service
 public class MutantServicesImpl implements IMutantService{
 
-	@Autowired
-	private HumanRepository repository;
+	private final HumanRepository repository;
 
 	@Override
 	public Boolean isMutant(Dna dna) {
