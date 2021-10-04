@@ -1,11 +1,12 @@
 package com.meli.mutant.service;
 
-import java.util.Optional;
+import com.meli.mutant.model.Dna;
+import com.meli.mutant.model.Stat;
 
 public interface IMutantService {
 
-    Boolean isMutant(String[] dna);
+    Boolean isMutant(Dna dna);
 
-    Optional getStats();
+    Stat getStats();
 
 }

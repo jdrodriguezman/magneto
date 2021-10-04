@@ -1,36 +1,57 @@
 package com.meli.mutant.service;
 
-import com.meli.mutant.repository.IMutantRepository;
+import com.meli.mutant.model.Dna;
+import com.meli.mutant.model.Stat;
+import com.meli.mutant.model.entity.Human;
+import com.meli.mutant.repository.impl.HumanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.Optional;
 
 @Service
 public class MutantServicesImpl implements IMutantService{
 
 	@Autowired
-	private IMutantRepository repository;
+	private HumanRepository repository;
 
 	@Override
-	public Boolean isMutant(String[] dna) {
-		String matriz[][] = new String[6][6];
-		for (int column = 0; column < dna.length; column++) {
-			String[] letters = dna[column].split("");
+	public Boolean isMutant(Dna dna) {
+		Human human= new Human();
+		human.setDna(dna.toString());
+
+		String adn[][] = new String[6][6];
+
+		for (int column = 0; column < dna.getDna().size(); column++) {
+			String[] letters = dna.getDna().get(column).split("");
 			for (int row = 0; row < letters.length; row++) {
-				matriz[column][row] = letters[row];
+				adn[column][row] = letters[row];
 			}
 		}
-		if( DiagonalRigt(matriz)){
-			repository.saveDNA(true,dna);
+		if( diagonalRight(adn)){
+			human.setMutant(true);
+			repository.saveDNA(human);
 			return true;
 		}
-		repository.saveDNA(false, dna);
+		human.setMutant(false);
+		repository.saveDNA(human);
+
 		return false;
 	}
 
+	@Override
+	public Stat getStats() {
 
-	public Boolean validateHorizontal(String[] dna){
+		// TODO: 3/10/2021 Eliminar
+		double count_mutant = 40;
+		double count_human = 100;
+
+		return Stat.builder()
+				.countMutantDna(count_mutant)
+				.countHumanDna(count_human)
+				.ratio(count_mutant / count_human)
+				.build();
+	}
+
+	private Boolean validateHorizontal(String[] dna){
 		for(int i = 0; i<dna.length; i++){
 			int sec = 1;
 			String[] letters = dna[i].split("");
@@ -48,28 +69,8 @@ public class MutantServicesImpl implements IMutantService{
 		return false;
 	}
 
-	public Boolean validateVertical(String[] dna){
-		String letterAfter = "";
-		int cont = 0;
-		for(int i = 0; i<dna.length; i++){
-			int sec = 1;
-			String[] letters = dna[i].split("");
-			for(int j = 0; j<=i; j++){
-				if(letterAfter.equals(letters[j])){
-					sec++;
-					if(sec == 4){
-						return true;
-					}
-				}else{
-					sec = 1;
-				}
-
-				letterAfter = letters[j];
-			}
-		}
-		return false;
-	}
-	public Boolean validateVerticalM(String matriz[][]){
+	// TODO: 3/10/2021 Var name in english
+	private Boolean validateVertical(String matriz[][]){
 		String letterAfter = "";
 		for (int x = 0; x < matriz[0].length; x++) {
 			int sec = 1;
@@ -89,7 +90,8 @@ public class MutantServicesImpl implements IMutantService{
 		return false;
 	}
 
-	public Boolean DiagonalLeft(String matriz[][]) {
+	// TODO: 3/10/2021 Var name in english
+	private Boolean diagonalLeft(String matriz[][]) {
 		int altura = matriz.length, anchura = matriz[0].length;
 		String letterAfter = "";
 		for (int diagonal = 1 - anchura; diagonal < altura; diagonal++) {
@@ -112,27 +114,10 @@ public class MutantServicesImpl implements IMutantService{
 		return false;
 	}
 
-	public Boolean DiagonalRigt(String matriz[][]) {
+	private Boolean diagonalRight(String matriz[][]) {
 		int altura = matriz.length, anchura = matriz[0].length;
-		for (int diagonal = 1 - anchura; diagonal <= altura - 1; // Mientras no llegue a la última diagonal.
-			 diagonal += 1 // Avanza hasta el comienzo de la siguiente diagonal.
-		) {
-			for (
-				// Recorre cada una de las diagonales a partir del extremo superior izquierdo.
-					Integer vertical = Math.min(0, diagonal), horizontal = -Math.max(0, diagonal);
-					vertical < altura && horizontal < anchura; // Mientras no excedan los límites.
-					vertical += 1, horizontal += 1 // Avanza en diagonal incrementando ambos ejes.
-			) {
-
-				System.out.println(matriz[vertical][horizontal]);
-
-			}
-		}
 		return false;
 	}
 
-	@Override
-	public Optional getStats() {
-		return Optional.empty();
-	}
+
 }

@@ -1,13 +1,15 @@
 package com.meli.mutant.controller;
 
 
+import com.meli.mutant.model.Dna;
+import com.meli.mutant.model.Stat;
 import com.meli.mutant.service.IMutantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Optional;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/")
@@ -18,16 +20,14 @@ public class MutantApiImpl implements IMutantApi {
 
 	@Override
 	@PostMapping("mutant/")
-	public ResponseEntity isMutant() {
-		String[] dna = new String[]{"ACCCCA", "ATGCGA", "CAGTGC", "TTATGT", "AGAAGG", "TCACTG"};
-		mutantService.isMutant(dna);
-		return null;
+	public ResponseEntity isMutant(@RequestBody @Valid Dna dna) {
+		return ResponseEntity
+				.status(mutantService.isMutant(dna) ? HttpStatus.OK : HttpStatus.FORBIDDEN).build();
 	}
 
 	@Override
 	@GetMapping("stats/")
 	public ResponseEntity getStats() {
-		Optional opt = mutantService.getStats();
-		return null;
+		return ResponseEntity.ok(mutantService.getStats());
 	}
 }
