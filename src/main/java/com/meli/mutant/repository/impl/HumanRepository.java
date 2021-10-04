@@ -5,4 +5,8 @@ import com.meli.mutant.model.entity.Human;
 public interface HumanRepository {
 
     void saveDNA(Human human);
+
+    long countHuman();
+
+    long countMutant();
 }

@@ -15,4 +15,14 @@ public class HumanRepositoryImpl implements HumanRepository {
     public void saveDNA(Human human) {
         humanRepository.save(human);
     }
+
+    @Override
+    public long countHuman() {
+        return humanRepository.count();
+    }
+
+    @Override
+    public long countMutant() {
+        return humanRepository.countHumanByMutantIsTrue();
+    }
 }

@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IHumanRepository extends JpaRepository<Human, Integer> {
+
+    long countHumanByMutantIsTrue();
 }
