@@ -2,7 +2,6 @@ package com.meli.mutant.controller;
 
 
 import com.meli.mutant.model.Dna;
-import com.meli.mutant.model.Stat;
 import com.meli.mutant.service.IMutantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
