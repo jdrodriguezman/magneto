@@ -44,6 +44,9 @@ public class HumanRepositoryImplTest {
     @Test
     public void saveHumanTest(){
         Human human = new Human();
+        human.setId(1);
+        human.setDna("dna");
+        human.setMutant(true);
         Mockito.when(humanRepository.save(human)).thenReturn(human);
         humanRepositoryImpl.saveDNA(human);
     }

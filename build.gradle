@@ -2,6 +2,7 @@ plugins {
 	id 'org.springframework.boot' version '2.5.5'
 	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
 	id 'java'
+	id 'jacoco'
 }
 
 group = 'com.meli'
@@ -11,7 +12,6 @@ sourceCompatibility = '1.8'
 repositories {
 	mavenCentral()
 }
-
 dependencies {
 	implementation 'org.hibernate:hibernate-validator:7.0.1.Final'
 	implementation 'org.springframework.boot:spring-boot-starter'
@@ -19,13 +19,43 @@ dependencies {
 	implementation 'org.springframework.data:spring-data-jpa:2.5.5'
 	implementation 'org.postgresql:postgresql:42.2.24'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.5'
-
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
 	compileOnly 'org.projectlombok:lombok:1.18.20'
 	annotationProcessor 'org.projectlombok:lombok:1.18.8'
 }
 
 test {
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+jacocoTestReport {
+	dependsOn test
+}
+
+jacoco {
+	toolVersion = "0.8.7"
+	reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
+}
+jacocoTestReport {
+	reports {
+		xml.required = false
+		csv.required = false
+		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+	}
+}
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			element = 'CLASS'
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.85
+			}
+			excludes = [
+					'com.meli.mutant.model.Stat',
+					'com.meli.mutant.MutantApplication'
+			]
+		}
+	}
 }

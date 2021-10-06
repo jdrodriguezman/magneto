@@ -5,9 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Getter
 @Setter
-@ToString
 @NoArgsConstructor
 @Entity(name = "humans")
 public class Human {
